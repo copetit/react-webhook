@@ -10,8 +10,8 @@ export default function App() {
     <div className="App">
       <h1>Hello {item}</h1>
       <h2>Start editing to see some magic happen!</h2>
-      <button onClick={incrementItem}> Inc </button>
-      <button onClick={decrementItem}> Dec </button>
+      <button onClick={incrementItem}> increment </button>
+      <button onClick={decrementItem}> Decrement </button>
     </div>
   );
 }
