@@ -1,32 +1,43 @@
 import { useState } from "react";
 import "./styles.css";
 
-const useInput = (initialValue, validator) => {
-  const [value, setValue] = useState(initialValue);
-  const onChange = (event) => {
-    const {
-      target: { value }
-    } = event;
-    let willUpdate = true;
-    if (typeof validator === "function") {
-      willUpdate = validator(value);
-    }
-    if (willUpdate) {
-      setValue(value);
-    }
-  };
-  return { value, onChange };
-};
+const content = [
+  {
+    tab: "Section 1",
+    content: "content of Section 1 "
+  },
+  {
+    tab: "Section 2",
+    content: "content of Section 2 "
+  }
+];
 
+const useTabs = (initialTab, allTabs) => {
+  if (!allTabs || !Array.isArray(allTabs)) {
+    return;
+  }
+  // 3. setCurrentIndex -> useState -> currentIndex -> current Item 변화
+  const [currentIndex, setCurrentIndex] = useState(initialTab);
+  return {
+    currentItem: allTabs[currentIndex],
+    // 2. changeItem -> setCurrentIndex로 보냄 ?
+    changeItem: setCurrentIndex
+  };
+};
 export default function App() {
-  // validator에  보내는 값
-  // const maxLen = (value) => value.length <= 10;
-  const maxLen = (value) => !value.includes("@");
-  const name = useInput("Mr. ", maxLen);
+  const { currentItem, changeItem } = useTabs(0, content);
+  console.log(changeItem);
   return (
     <div className="App">
-      <h1>Hello</h1>
-      <input placeholder="Name" {...name} />
+      {/* map(value, index, array) */}
+      {/* 「value」は、配列の値  */}
+      {/* 「index」は、配列のインデックス番号 */}
+      {/* 「array」は、現在処理している配列 */}
+      {content.map((section, index) => (
+        //1. button을 누르면 changeItem에 인덱스번호 (0 or 1)를 보냄
+        <button onClick={() => changeItem(index)}>{section.tab} </button>
+      ))}
+      <div>{currentItem.content}</div>
     </div>
   );
 }
