@@ -18,15 +18,25 @@ const useTabs = (initialTab, allTabs) => {
   }
   // 3. setCurrentIndex -> useState -> currentIndex -> current Item 변화
   const [currentIndex, setCurrentIndex] = useState(initialTab);
+  console.log("fuga");
+  console.log(currentIndex);
+  console.log(setCurrentIndex);
   return {
     currentItem: allTabs[currentIndex],
     // 2. changeItem -> setCurrentIndex로 보냄 ?
     changeItem: setCurrentIndex
   };
 };
+
 export default function App() {
+  // returnのobject形だからこうかいている
   const { currentItem, changeItem } = useTabs(0, content);
+  console.log("hoge");
+  console.log(currentItem);
   console.log(changeItem);
+  // const currentItem = useTabs(0, content).currentItem
+  // const changeItem = useTabs(0, content).changeItem
+
   return (
     <div className="App">
       {/* map(value, index, array) */}
