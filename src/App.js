@@ -24,7 +24,7 @@ const useTabs = (initialTab, allTabs) => {
   return {
     currentItem: allTabs[currentIndex],
     // 2. changeItem -> setCurrentIndex로 보냄
-ㄴ    changeItem: setCurrentIndex
+    changeItem: setCurrentIndex
   };
 };
 
