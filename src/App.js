@@ -1,22 +1,38 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./styles.css";
 
-const useTitle = (initinalTitle) => {
-  const [title, setTitle] = useState(initinalTitle);
-  const updateTitle = () => {
-    const htmlTitle = document.querySelector("title");
-    htmlTitle.innerText = title;
-  };
-  useEffect(updateTitle, [title]);
-  return setTitle;
+const useClick = (onClick) => {
+  if (typeof onClick !== "function") {
+    return;
+  }
+  const el = useRef();
+
+  // only componentDidMonut
+  useEffect(() => {
+    // useEffect내에 있는 func은 componentDidMonut, componentDidUpdate때 호출됨
+    if (el.current) {
+      el.current.addEventListener("click", onClick);
+    }
+    // componentWillUnmount 때 호출됨
+    return () => {
+      if (el.current) {
+        el.current.removeEventListener("click", onClick);
+      }
+    };
+    // no dependecy = update는 고려하지 않음
+  }, []);
+  return el;
 };
+
 export default function App() {
-  // 인수로 받은 문자열으로 setTitle return 한다
-  const titleUpdater = useTitle("Loading...");
-  setTimeout(() => titleUpdater("Home"), 5000);
+  const sayHello = () => console.log("hello");
+  const title = useClick(sayHello);
+  // const input = useRef();
+  // setTimeout(() => input.current.focus(), 3000);
   return (
     <div className="App">
-      <div>hi</div>
+      <h1 ref={title}>hi</h1>
+      {/* <input ref={input} placeholder="la" /> */}
     </div>
   );
 }
