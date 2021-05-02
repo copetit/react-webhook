@@ -1,35 +1,28 @@
 import { useState, useEffect, useRef } from "react";
 import "./styles.css";
 
-const useBeforeLeave = (onBefore) => {
-  if (typeof onBefore !== "function") {
+const useFadeIn = (duration = 1, delay = 0) => {
+  if (typeof duration !== "number" || typeof delay !== "number") {
     return;
   }
-  // 이벤트가 발생할때 (mouseleave)불려짐 (3)
-  const handle = (event) => {
-    // event안에는 여러 obj가 있다.
-    // clientY를 사용해서 높이를 체크/ 화면 위로 가면 onBefore이 실행되게 함 (4)
-    const { clientY } = event;
-    if (clientY <= 0) {
-      onBefore();
-    }
-  };
+  const element = useRef();
   useEffect(() => {
-    // dom이 생성될때 한번 불려짐 (2)
-    document.addEventListener("mouseleave", handle);
-    console.log("2");
-    return () => {
-      document.removeEventListener("mouseleave", handle);
-    };
+    if (element.current) {
+      const { current } = element;
+      current.style.transition = `opacity ${duration}s ease-in-out ${delay}s`;
+      current.style.opacity = 1;
+    }
   }, []);
+  return { ref: element, style: { opacity: 0 } };
 };
 export default function App() {
-  // 1
-  const begForLife = () => console.log("pls dont leave");
-  useBeforeLeave(begForLife);
+  const fadeInH1 = useFadeIn(1, 5);
+  const fadeInP = useFadeIn(5, 10);
+
   return (
     <div className="App">
-      <h1>Hello</h1>
+      <h1 {...fadeInH1}>Hello</h1>
+      <p {...fadeInP}>redpanda is cute!</p>
     </div>
   );
 }
