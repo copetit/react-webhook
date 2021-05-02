@@ -22,7 +22,7 @@ const useNetwork = (onChange) => {
     console.log("setStatus전");
     // C. offline으로 변경했을 때는 setStatus 에 false
     setStatus(navigator.onLine);
-    console.log("setStatus후");
+    console.log("setStatus후"); // 여긴 왜 마지막에 불리는지 모르겠음
   };
   // 6. dom이 전부 불려지고 나서 처음 한번만 불려짐
   // online일때도 handleChange, offline일때도 handlechange
