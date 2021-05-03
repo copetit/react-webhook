@@ -1,28 +1,38 @@
 import { useState, useEffect, useRef } from "react";
+import { flushSync } from "react-dom";
 import "./styles.css";
 
-const useScroll = () => {
-  const [state, setState] = useState({
-    x: 0,
-    y: 0
-  });
-  const onScroll = () => {
-    setState({ x: window.scrollX, y: window.scrollY });
-  };
-  useEffect(() => {
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-  return state;
-};
+const useFullscreen = (callback) => {
+  const el = useRef();
 
+  const triggerFull = () => {
+    if (el.current) {
+      el.current.requestFullscreen();
+    }
+    if (callback && typeof callback === "function") {
+      callback(true);
+    }
+  };
+  const exitFull = () => {
+    document.exitFullscreen();
+    if (callback && typeof callback === "function") {
+      callback(false);
+    }
+  };
+  return { el, triggerFull, exitFull };
+};
 export default function App() {
-  const { y } = useScroll();
+  const onFullS = (isFull) => {
+    console.log(isFull ? "We are full" : "We are small");
+  };
+  const { el, triggerFull, exitFull } = useFullscreen(onFullS);
   return (
     <div className="App" style={{ height: "1000vh" }}>
-      <h1 style={{ position: "fixed", color: y > 100 ? "red" : "blue" }}>
-        HI{" "}
-      </h1>
+      <div ref={el}>
+        <img src="https://images-fe.ssl-images-amazon.com/images/I/8135hRXxTvL.png" />
+        <button onClick={exitFull}>Exit Screen </button>
+      </div>
+      <button onClick={triggerFull}>FULL Screen </button>
     </div>
   );
 }
